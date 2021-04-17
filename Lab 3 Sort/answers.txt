@@ -1,0 +1,11 @@
+sort1 uses: bubble sort  reversed: 12 sec., 0.4 , random: 15, 0,515 , sorted: 3.8
+
+How do you know?: faster than sort3 on sorted50000.txt
+
+sort2 uses: merge sort   reversed: 4sec,  0.074 , random: 2.2, 0.021, sorted: 3.557
+
+How do you know?: fastest on random50000.txt
+
+sort3 uses: selection sort   reversed: 7.5sec, 0.169, random: 7, 0.2, sorted: 7.4
+
+How do you know?: Same sort speed on reversed and sorted.
