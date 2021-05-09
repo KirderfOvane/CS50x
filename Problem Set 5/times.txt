@@ -1,0 +1,29 @@
+1 HASH bucket:
+So dictionary is loaded as a linked list.
+
+aca.txt :
+WORDS MISSPELLED:     17062
+WORDS IN DICTIONARY:  143091
+WORDS IN TEXT:        376904
+TIME IN load:         0.02
+TIME IN check:        165.99
+TIME IN size:         0.00
+TIME IN unload:       0.00
+TIME IN TOTAL:        166.01
+
+----------------------------
+
+26 HASH buckets:
+One bucket for every first letter,
+Thereafter a linked list for all A's, B's , C's....
+
+WORDS MISSPELLED:     17062
+WORDS IN DICTIONARY:  143091
+WORDS IN TEXT:        376904
+TIME IN load:         0.02
+TIME IN check:        10.39
+TIME IN size:         0.00
+TIME IN unload:       0.00
+TIME IN TOTAL:        10.40
+
+----------------------------
