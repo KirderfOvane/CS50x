@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+    <title>Trivia!</title>
+
+    <script>
+      // Code to check answers to questions
+      function onDomLoaded() {
+        let buttonGroup = document.querySelectorAll('#buttonGroup');
+        buttons = buttonGroup[0].children;
+        for (let i = 0; i < buttons.length; i++) {
+          button = document.querySelector('#' + buttons[i].id);
+
+          button.addEventListener('click', function (event) {
+            if (event.target.id === 'answer1') {
+              document.querySelector('#' + event.target.id).style.backgroundColor = 'green';
+              document.getElementById('output').innerHTML = 'Correct';
+            } else {
+              document.querySelector('#' + event.target.id).style.backgroundColor = 'red';
+              document.getElementById('output').innerHTML = 'Incorrect';
+            }
+          });
+        }
+      }
+      document.addEventListener('DOMContentLoaded', onDomLoaded);
+      function onSubmit(event) {
+        formanswerElement = document.querySelector('#formanswer');
+        if (formanswerElement.value.toUpperCase() === 'SWITZERLAND') {
+          document.getElementById('formOutput').innerHTML = 'Correct';
+          formanswerElement.style.backgroundColor = 'green';
+        } else {
+          document.getElementById('formOutput').innerHTML = 'Incorrect';
+          formanswerElement.style.backgroundColor = 'red';
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="jumbotron">
+      <h1>Trivia!</h1>
+    </div>
+
+    <div class="container">
+      <div class="section">
+        <h2>Part 1: Multiple Choice</h2>
+        <hr />
+
+        <h3>What is the approximate ratio of people to sheep in New Zealand?</h3>
+        <div id="buttonGroup">
+          <button id="answer1">6 people per 1 sheep</button>
+          <button id="answer2">3 people per 1 sheep</button>
+          <button id="answer3">1 person per 1 sheep</button>
+          <button id="answer4">1 person per 3 sheep</button>
+          <button id="answer5">1 person per 6 sheep</button>
+        </div>
+        <div id="output"></div>
+      </div>
+
+      <div class="section">
+        <h2>Part 2: Free Response</h2>
+        <hr />
+        <h3>In which country is it illegal to own only one guinea pig, as a lone guinea pig might get lonely?</h3>
+        <form onsubmit="onSubmit(); return false;">
+          <input id="formanswer" type="text" />
+          <input type="submit" />
+        </form>
+        <div id="formOutput"></div>
+      </div>
+    </div>
+  </body>
+</html>
