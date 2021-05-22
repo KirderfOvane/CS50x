@@ -48,10 +48,11 @@ def index():
     """Show portfolio of stocks"""
     # Odds are you’ll want to execute multiple SELECTs.
     # Depending on how you implement your table(s), you might find GROUP BY HAVING SUM and/or WHERE of interest.
+    # Odds are you’ll want to call lookup for each stock.
     cash = db.execute("SELECT cash FROM users WHERE id = ?",session['user_id'])
     stocks = db.execute("SELECT symbol,price,purchased_at,share_number,name,total FROM stocks WHERE userId = ?",session['user_id'])
 
-    # Odds are you’ll want to call lookup for each stock.
+    
     return render_template("index.html",cash=usd(cash[0]['cash']),stocks=stocks,usd=usd)
 
 
@@ -60,6 +61,20 @@ def index():
 def buy():
     """Buy shares of stock"""
     # Require that a user input a stock’s symbol, implemented as a text field whose name is symbol.
+    # Render an apology if the input is blank or the symbol does not exist (as per the return value of lookup).
+    # Require that a user input a number of shares, implemented as a text field whose name is shares.
+    # Render an apology if the input is not a positive integer.
+    # Submit the user’s input via POST to /buy.
+    # Odds are you’ll want to call lookup to look up a stock’s current price.
+    # Odds are you’ll want to SELECT how much cash the user currently has in users.
+    # Add one or more new tables to finance.db via which to keep track of the purchase. Store enough information so that you know who bought what at what price and when.
+    # Use appropriate SQLite types.
+    # Define UNIQUE indexes on any fields that should be unique.
+    # Define (non-UNIQUE) indexes on any fields via which you will search (as via SELECT with WHERE).
+    # Render an apology, without completing a purchase, if the user cannot afford the number of shares at the current price.
+    # When a purchase is complete, redirect the user back to the index page.
+    # You don’t need to worry about race conditions (or use transactions).
+    
     if request.method == "GET":
        return render_template("buy.html")
     else:
@@ -103,19 +118,7 @@ def buy():
 
         return redirect('/')
 
-    # Render an apology if the input is blank or the symbol does not exist (as per the return value of lookup).
-    # Require that a user input a number of shares, implemented as a text field whose name is shares.
-    # Render an apology if the input is not a positive integer.
-    # Submit the user’s input via POST to /buy.
-    # Odds are you’ll want to call lookup to look up a stock’s current price.
-    # Odds are you’ll want to SELECT how much cash the user currently has in users.
-    # Add one or more new tables to finance.db via which to keep track of the purchase. Store enough information so that you know who bought what at what price and when.
-    # Use appropriate SQLite types.
-    # Define UNIQUE indexes on any fields that should be unique.
-    # Define (non-UNIQUE) indexes on any fields via which you will search (as via SELECT with WHERE).
-    # Render an apology, without completing a purchase, if the user cannot afford the number of shares at the current price.
-    # When a purchase is complete, redirect the user back to the index page.
-    # You don’t need to worry about race conditions (or use transactions).
+    
 
 
 
@@ -123,9 +126,11 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    userTransactions = db.execute("SELECT symbol,price,share_number,total,created_at FROM transactions WHERE userId = ?",session['user_id'])
     # For each row, make clear whether a stock was bought or sold and include the stock’s symbol, the (purchase or sale) price, the number of shares bought or sold, and the date and time at which the transaction occurred.
     # You might need to alter the table you created for buy or supplement it with an additional table. Try to minimize redundancies.
+
+    userTransactions = db.execute("SELECT symbol,price,share_number,total,created_at FROM transactions WHERE userId = ?",session['user_id'])
+    
     return render_template("history.html",transactions = userTransactions,usd=usd)
 
 
@@ -181,6 +186,11 @@ def logout():
 def quote():
     """Get stock quote."""
     # Require that a user input a stock’s symbol, implemented as a text field whose name is symbol.
+    # Submit the user’s input via POST to /quote.
+    # Odds are you’ll want to create two new templates (e.g., quote.html and quoted.html).
+    # When a user visits /quote via GET, render one of those templates, inside of which should be an HTML form that submits to /quote via POST.
+    # In response to a POST, quote can render that second template, embedding within it one or more values from lookup.
+    
     stockQuote = {}
     if request.method == "GET":
         return render_template("quote.html")
@@ -193,17 +203,22 @@ def quote():
         if stockQuote == None:
             return apology("You need to provide a valid symbol")
         return render_template("quote.html",quote = stockQuote,usd=usd)
-    # Submit the user’s input via POST to /quote.
-    # Odds are you’ll want to create two new templates (e.g., quote.html and quoted.html).
-    # When a user visits /quote via GET, render one of those templates, inside of which should be an HTML form that submits to /quote via POST.
-
-    # In response to a POST, quote can render that second template, embedding within it one or more values from lookup.
+  
 
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
+    # Require that a user input a username, implemented as a text field whose name is username
+    # Render an apology if the user’s input is blank or the username already exists.
+    # Require that a user input a password, implemented as a text field whose name is password, and then that same password again, implemented as a text field whose name is confirmation
+    # Render an apology if either input is blank or the passwords do not match.
+    # Submit the user’s input via POST to /register.
+    # INSERT the new user into users, storing a hash of the user’s password, not the password itself.
+    # Hash the user’s password with generate_password_hash Odds are you’ll want to create a new template (e.g., register.html) that’s quite similar to login.html.
+    # Once the user is registered, you may either automatically log in the user or bring the user to a page where they can log in themselves.
+
     if request.method == "POST":
         # pickup req.body / form inputs
         username = request.form.get("username")
@@ -234,21 +249,21 @@ def register():
         return redirect("/login")
     else:
         return render_template("register.html")
-    # Require that a user input a username, implemented as a text field whose name is username
-    # Render an apology if the user’s input is blank or the username already exists.
-    # Require that a user input a password, implemented as a text field whose name is password, and then that same password again, implemented as a text field whose name is confirmation
-    # Render an apology if either input is blank or the passwords do not match.
-    # Submit the user’s input via POST to /register.
-    # INSERT the new user into users, storing a hash of the user’s password, not the password itself.
-    # Hash the user’s password with generate_password_hash Odds are you’ll want to create a new template (e.g., register.html) that’s quite similar to login.html.
-    # Once the user is registered, you may either automatically log in the user or bring the user to a page where they can log in themselves.
+   
 
 
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
     """Sell shares of stock"""
+    # Render an apology if the user fails to select a stock or if (somehow, once submitted) the user does not own any shares of that stock.
+    # Require that a user input a number of shares, implemented as a text field whose name is shares.
+    # Render an apology if the input is not a positive integer or if the user does not own that many shares of the stock.
+    # Submit the user’s input via POST to /sell.
+    # When a sale is complete, redirect the user back to the index page.
+    # You don’t need to worry about race conditions (or use transactions).
     # Require that a user input a stock’s symbol, implemented as a select menu whose name is symbol.
+
     if request.method == "POST":
         symbol = request.form.get("symbol")
         if not symbol:
@@ -298,12 +313,7 @@ def sell():
         # get all users stocks
         symbols = db.execute("SELECT symbol FROM stocks WHERE userId = ?",session['user_id'])
         return render_template("sell.html",symbols = symbols)
-    # Render an apology if the user fails to select a stock or if (somehow, once submitted) the user does not own any shares of that stock.
-    # Require that a user input a number of shares, implemented as a text field whose name is shares.
-    # Render an apology if the input is not a positive integer or if the user does not own that many shares of the stock.
-    # Submit the user’s input via POST to /sell.
-    # When a sale is complete, redirect the user back to the index page.
-    # You don’t need to worry about race conditions (or use transactions).
+  
 
 
 @app.route("/changepassword", methods=["GET", "POST"])
