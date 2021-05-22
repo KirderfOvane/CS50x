@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    quote
+{% endblock %}
+
+{% block main %}
+
+    {% if quote %}
+     <form action="/quote" method="POST" class="form-group">
+       <input name="symbol" type="text" placeholder="input stock symbol" class="form-control"/>
+       <button type="submit" value="Submit" >Submit</button>
+    </form>
+    <div>
+       <div>{{quote.name}}</div>
+       <div>{{usd(quote.price)}}</div>
+       <div>{{quote.symbol}}</div>
+    </div>
+    {% else %}
+     <form action="/quote" method="POST" class="form-group">
+        <input name="symbol" type="text" placeholder="input stock symbol" class="form-control"/>
+        <button type="submit" class="btn btn-dark" value="Submit" >Submit</button>
+     </form>
+    {% endif %}
+{% endblock %}
+
+
+
